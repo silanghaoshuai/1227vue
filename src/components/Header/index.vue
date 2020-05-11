@@ -53,28 +53,39 @@ export default {
 
   data() {
     return {
-      keyword: "atguigu",
+      keyword: "",
     };
+  },
+  mounted() {
+    // 通过事件总线对象绑定事件监听来接收消息, 从而可以更新数据
+    this.$bus.$on("removeKeyword", () => {
+      this.keyword = "";
+    });
   },
 
   methods: {
     search() {
       const keyword = this.keyword;
-      const location = { 
-          name: 'search', 
-        }
-        // 如果keyword有值, 指定params
-        if (keyword) {
-          location.params = {keyword}
-        }
-        // 同时还要携带当前原本的query
-        const {query} = this.$route
-        location.query = query
-        // 跳转到Search
-        this.$router.push(location)
+      const location = {
+        name: "search",
+      };
+      // 如果keyword有值, 指定params
+      if (keyword) {
+        location.params = { keyword };
       }
-    }
-  }
+      // 同时还要携带当前原本的query
+      const { query } = this.$route;
+      location.query = query;
+      // 跳转到Search
+      if (this.$route.path.indexOf("/search") === 0) {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
+      this.$router.push(location);
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>

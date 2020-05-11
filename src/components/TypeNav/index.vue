@@ -20,7 +20,8 @@
                     :data-categoryName="c1.categoryName"
                     :data-category1Id="c1.categoryId"
                     >{{ c1.categoryName }}</a
-                  > </h3>
+                  >
+                </h3>
                 <div class="item-list clearfix">
                   <div class="subitem">
                     <dl
@@ -34,7 +35,8 @@
                           :data-categoryName="c2.categoryName"
                           :data-category2Id="c2.categoryId"
                           >{{ c2.categoryName }}</a
-                        > </dt>
+                        >
+                      </dt>
                       <dd>
                         <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
                           <a
@@ -42,7 +44,8 @@
                             :data-categoryName="c3.categoryName"
                             :data-category3Id="c3.categoryId"
                             >{{ c3.categoryName }}</a
-                          ></em>
+                          ></em
+                        >
                       </dd>
                     </dl>
                   </div>
@@ -75,12 +78,12 @@ export default {
 
   data() {
     return {
-      currentIndex: -2, 
+      currentIndex: -2,
       isShowFirst: false, // 是否显示一级列表
     };
   },
   computed: {
- ...mapState({
+    ...mapState({
       categoryList: (state) => state.home.baseCategoryList,
     }),
   },
@@ -103,7 +106,7 @@ export default {
         this.isShowFirst = false;
       }
     },
-    showSubCategorys: throttle(function (index) {
+    showSubCategorys: throttle(function(index) {
       if (this.currentIndex === -2) return; // 移除父盒子不做更新
       this.currentIndex = index;
     }, 300),
@@ -137,8 +140,11 @@ export default {
           location.params = { keyword };
         }
         // 跳转到search
-        this.$router.push(location);
-
+        if (this.$route.name === "search") {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
         // 隐藏一级列表
         this.hideCategorys();
       }
