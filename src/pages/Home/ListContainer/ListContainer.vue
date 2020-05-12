@@ -99,25 +99,21 @@
         msg: 'atguigu',
       }
     },
+
     computed: {
       ...mapState({
-        banners: state => state.home.banners   // []  ==> [...]
+        banners: state => state.home.banners   
       })
     },
+
     watch: {
       msg () {
         console.log('watch msg', this.$refs.msg.innerHTML)
       }
     },
-    /* 
-    初始显示界面后立即执行
-    */
+
+
     mounted () {
-      // 办法1: 计时器方法可以解决但是因为加载数据不确定所以从根本不能彻底解决界面更新问题
-      /* 
-      setTimeout(() => {
-        this.initSwiper()
-      }, 1000) */
     },
 
     methods: {

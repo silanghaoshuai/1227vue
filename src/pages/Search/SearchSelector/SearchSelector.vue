@@ -29,19 +29,19 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState, mapGetters} from 'vuex'
   export default {
     name: 'SearchSelector',
 
     props: {
-      setTrademark: Function,  // 更新父组件的trademark数据函数
-      addProp: Function, // 更新父组件的props数据函数
+      setTrademark: Function,  
+      addProp: Function, 
     },
 
     computed: {
-      ...mapState({
-        trademarkList: state => state.search.productList.trademarkList,  // 品牌列表
-        attrList: state => state.search.productList.attrsList, // 属性列表
+      ...mapGetters({
+        trademarkList: 'trademarkList',
+        attrList: 'attrsList'
       })
     }
   }
