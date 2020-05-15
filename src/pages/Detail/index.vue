@@ -433,7 +433,17 @@ export default {
           skuId,
           skuNum,
         });
-        alert("添加成功, 准备自动跳转到成功的界面");
+        // 向sessionStorage中保存skuInfo
+        window.sessionStorage.setItem(
+          "SKU_INFO_KEY",
+          JSON.stringify(this.skuInfo)
+        );
+
+        // 跳转到添加成功的界面
+        this.$router.push({
+          path: "/addcartsuccess",
+          query: { skuNum },
+        });
       } catch (error) {
         alert(error.message);
       }
