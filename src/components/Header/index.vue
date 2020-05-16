@@ -1,13 +1,13 @@
 <template>
-  <!-- 头部 -->
   <header class="header">
     <!-- 头部的第一行 -->
     <div class="top">
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
+          
           <p v-if="userInfo.name">
-            <span>{{ userInfo.nickName }}</span>
+            <span>{{userInfo.nickName}}</span>
             &nbsp;&nbsp;&nbsp;
             <a href="javascript:" @click="logout">登出</a>
           </p>
@@ -19,7 +19,7 @@
           </p>
         </div>
         <div class="typeList">
-          <a href="###">我的订单</a>
+          <router-link to="/center/myorder">我的订单</router-link>
           <router-link to="/shopcart">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
@@ -34,172 +34,171 @@
     <div class="bottom">
       <h1 class="logoArea">
         <router-link class="logo" to="/">
-          <img src="./images/logo.png" alt="" />
+          <img src="./images/logo.png" alt="">
         </router-link>
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
-          <input
-            type="text"
-            id="autocomplete"
-            class="input-error input-xxlarge"
-            v-model="keyword"
-            placeholder="关键字"
-          />
-          <button class="sui-btn btn-xlarge btn-danger" @click.prevent="search">
-            搜索
-          </button>
+
+        <form action="/xxx" class="searchForm">
+          <input type="text" id="autocomplete" class="input-error input-xxlarge"
+          placeholder="关键字" v-model="keyword"/>
+          <button class="sui-btn btn-xlarge btn-danger" 
+            @click.prevent="search" type="submit">搜索</button> <!-- 默认type为submit -->
         </form>
       </div>
     </div>
   </header>
 </template>
 
+
 <script>
-import { mapState } from "vuex";
-export default {
-  name: "Header",
-  data() {
-    return {
-      keyword: "",
-    };
-  },
-  mounted() {
-    this.$bus.$on("removeKeyword", () => {
-      this.keyword = "";
-    });
-  },
+  import {mapState} from 'vuex'
+  export default {
+    name: 'Header',
 
-  computed: {
-    ...mapState({
-      userInfo: (state) => state.user.userInfo,
-    }),
-  },
-
-  methods: {
-    //登出用户
-    async logout() {
-      try {
-        await this.$store.dispatch("Logout");
-      } catch (error) {
-        alert(error.message);
+    data () {
+      return {
+        keyword: ''
       }
     },
 
-    search() {
-      // this.$router.push(`/search/${this.searchName}`);
-      let location = {
-        name: "search",
-      };
-      const keyword = this.keyword;
-      if (keyword) {
-        location.params = { keyword };
-      }
-      const { query } = this.$route;
-      location.query = query;
-
-      if (this.$route.name === "search") {
-        this.$router.replace(location);
-      } else {
-        this.$router.push(location);
-      }
+    mounted () {
+      // 在Header, 通过事件总线对象绑定事件监听来接收消息, 从而可以更新数据
+      this.$bus.$on('removeKeyword', () => {
+        this.keyword = ''
+      })
     },
-  },
-};
+
+    computed: {
+      ...mapState({
+        userInfo: state => state.user.userInfo
+      })
+    },
+
+    methods: {
+      logout () {
+        if (window.confirm('确定退出吗?')) {
+          this.$store.dispatch('logout')
+        }
+      },
+
+      search () {
+        const keyword = this.keyword
+        const location = { 
+          name: 'search', 
+        }
+        // 如果keyword有值, 指定params
+        if (keyword) {
+          location.params = {keyword}
+        }
+        // 同时还要携带当前原本的query
+        const {query} = this.$route
+        location.query = query
+        // 跳转到Search
+        if (this.$route.path.indexOf('/search') === 0) {
+          this.$router.replace(location)
+        } else {
+          this.$router.push(location)
+        }
+      }
+    }
+  }
 </script>
 
 <style lang="less" scoped>
-.header {
-  & > .top {
-    background-color: #eaeaea;
-    height: 30px;
-    line-height: 30px;
+  .header {
+    &>.top {
+      background-color: #eaeaea;
+      height: 30px;
+      line-height: 30px;
 
-    .container {
+      .container {
+        width: 1200px;
+        margin: 0 auto;
+        overflow: hidden;
+
+        .loginList {
+          float: left;
+
+          p {
+            float: left;
+            margin-right: 10px;
+
+            .register {
+              border-left: 1px solid #b3aeae;
+              padding: 0 5px;
+              margin-left: 5px;
+            }
+          }
+        }
+
+        .typeList {
+          float: right;
+
+          a {
+            padding: 0 10px;
+
+            &+a {
+              border-left: 1px solid #b3aeae;
+            }
+          }
+
+        }
+
+      }
+    }
+
+    &>.bottom {
       width: 1200px;
       margin: 0 auto;
       overflow: hidden;
 
-      .loginList {
+      .logoArea {
         float: left;
 
-        p {
-          float: left;
-          margin-right: 10px;
-
-          .register {
-            border-left: 1px solid #b3aeae;
-            padding: 0 5px;
-            margin-left: 5px;
+        .logo {
+          img {
+            width: 175px;
+            margin: 25px 45px;
           }
         }
       }
 
-      .typeList {
+      .searchArea {
         float: right;
+        margin-top: 35px;
 
-        a {
-          padding: 0 10px;
+        .searchForm {
+          overflow: hidden;
 
-          & + a {
-            border-left: 1px solid #b3aeae;
+          input {
+            box-sizing: border-box;
+            width: 490px;
+            height: 32px;
+            padding: 0px 4px;
+            border: 2px solid #ea4a36;
+            float: left;
+
+            &:focus {
+              outline: none;
+            }
+          }
+
+          button {
+            height: 32px;
+            width: 68px;
+            background-color: #ea4a36;
+            border: none;
+            color: #fff;
+            float: left;
+            cursor: pointer;
+
+            &:focus {
+              outline: none;
+            }
           }
         }
       }
     }
   }
-
-  & > .bottom {
-    width: 1200px;
-    margin: 0 auto;
-    overflow: hidden;
-
-    .logoArea {
-      float: left;
-
-      .logo {
-        img {
-          width: 175px;
-          margin: 25px 45px;
-        }
-      }
-    }
-
-    .searchArea {
-      float: right;
-      margin-top: 35px;
-
-      .searchForm {
-        overflow: hidden;
-
-        input {
-          box-sizing: border-box;
-          width: 490px;
-          height: 32px;
-          padding: 0px 4px;
-          border: 2px solid #ea4a36;
-          float: left;
-
-          &:focus {
-            outline: none;
-          }
-        }
-
-        button {
-          height: 32px;
-          width: 68px;
-          background-color: #ea4a36;
-          border: none;
-          color: #fff;
-          float: left;
-          cursor: pointer;
-
-          &:focus {
-            outline: none;
-          }
-        }
-      }
-    }
-  }
-}
 </style>
