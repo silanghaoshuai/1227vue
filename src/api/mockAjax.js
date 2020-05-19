@@ -1,29 +1,32 @@
-import axios from 'axios'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
-NProgress.configure({ showSpinner: false }) 
-/* 1. 配置通用的基础路径和超时 */
+import axios from "axios";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
+//只显示水平进度条
+NProgress.configure({ showSpinner: false });
+
 const instance = axios.create({
-  baseURL: '/mock',
-  timeout: 15000, 
-})
-instance.interceptors.request.use(config => {
-  /* 2. 显示请求进度条 */
-  NProgress.start()
-  return config
-})
+  baseURL: "/mock",
+  timeout: 15000,
+});
+
+//请求拦截器
+instance.interceptors.request.use((config) => {
+  NProgress.start();
+  return config;
+});
+
+//响应拦截器
 instance.interceptors.response.use(
-  response => {
-    NProgress.done()
-    /*  3. 成功返回的数据不再是response, 而直接是响应体数据response.data */
-    return response.data
+  (response) => {
+    NProgress.done();
+    return response.data;
   },
-  error => {
-    /* 2.2. 请求成功结束 隐藏进度条 */
-    NProgress.done()
-    /* 4. 统一处理请求错误, 具体请求也可以选择处理或不处理 */
-    alert(`请求出错: ${error.message || '未知错误'}`)
-    return Promise.reject(error)
+  (error) => {
+    NProgress.done();
+    alert(`请求失败：${error.message || "未知错误"}`);
+    return Promise.reject(error);
   }
-)
-export default instance
+);
+
+export default instance;

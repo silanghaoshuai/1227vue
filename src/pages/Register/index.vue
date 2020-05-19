@@ -96,7 +96,7 @@
         mobile: '', // 手机号
         password: '', // 密码
         password2: '', // 确认密码
-        code: '', // 图形验证
+        code: '', // 一次性图形验证
         isAgree: false, // 是否同意
       }
     },
@@ -137,127 +137,132 @@
       更新验证码显示: 告诉浏览器重新发请求获取验证码图片
       */
       updateCode() {
+        // 给img重新指定src
+        // 如果src新的值与原本的值相同, 浏览器不会自动请求获取图片显示
+        // 解决: 携带时间(当前时间值)戳的参数  ==> 每次指定的src值都不一样==> 浏览器就会自动请求
+        // this.$refs.code.src = `http://182.92.128.115/api/user/passport/code`  // 是一个http请求
         this.$refs.code.src = `/api/user/passport/code` // 是一个http请求
       }
     }
   }
 </script>
 
+
 <style lang="less" scoped>
-  .register-container {
-    .register {
-      width: 1200px;
-      height: 445px;
-      border: 1px solid rgb(223, 223, 223);
-      margin: 0 auto;
+.register-container {
+  .register {
+    width: 1200px;
+    height: 445px;
+    border: 1px solid rgb(223, 223, 223);
+    margin: 0 auto;
 
-      h3 {
-        background: #ececec;
-        margin: 0;
-        padding: 6px 15px;
-        color: #333;
-        border-bottom: 1px solid #dfdfdf;
-        font-size: 20.04px;
-        line-height: 30.06px;
+    h3 {
+      background: #ececec;
+      margin: 0;
+      padding: 6px 15px;
+      color: #333;
+      border-bottom: 1px solid #dfdfdf;
+      font-size: 20.04px;
+      line-height: 30.06px;
 
-        span {
-          font-size: 14px;
-          float: right;
+      span {
+        font-size: 14px;
+        float: right;
 
-          a {
-            color: #e1251b;
-          }
-        }
-      }
-
-      div:nth-of-type(1) {
-        margin-top: 40px;
-      }
-
-      .content {
-        padding-left: 390px;
-        margin-bottom: 18px;
-        position: relative;
-
-        label {
-          font-size: 14px;
-          width: 96px;
-          text-align: right;
-          display: inline-block;
-        }
-
-        input {
-          width: 270px;
-          height: 38px;
-          padding-left: 8px;
-          box-sizing: border-box;
-          margin-left: 5px;
-          outline: none;
-          border: 1px solid #999;
-          &.is-invalid {
-            border: 1px solid red;
-          }
-        }
-
-        img {
-          vertical-align: sub;
-        }
-
-        .error-msg {
-          position: absolute;
-          top: 100%;
-          left: 495px;
-          color: red;
-        }
-      }
-
-      .controls {
-        text-align: center;
-        position: relative;
-
-        input {
-          vertical-align: middle;
-        }
-
-        .error-msg {
-          position: absolute;
-          top: 100%;
-          left: 495px;
-          color: red;
-        }
-      }
-
-      .btn {
-        text-align: center;
-        line-height: 36px;
-        margin: 17px 0 0 55px;
-
-        button {
-          outline: none;
-          width: 270px;
-          height: 36px;
-          background: #e1251b;
-          color: #fff !important;
-          display: inline-block;
-          font-size: 16px;
+        a {
+          color: #e1251b;
         }
       }
     }
 
-    .copyright {
-      width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      line-height: 24px;
+    div:nth-of-type(1) {
+      margin-top: 40px;
+    }
 
-      ul {
-        li {
-          display: inline-block;
-          border-right: 1px solid #e4e4e4;
-          padding: 0 20px;
-          margin: 15px 0;
+    .content {
+      padding-left: 390px;
+      margin-bottom: 18px;
+      position: relative;
+
+      label {
+        font-size: 14px;
+        width: 96px;
+        text-align: right;
+        display: inline-block;
+      }
+
+      input {
+        width: 270px;
+        height: 38px;
+        padding-left: 8px;
+        box-sizing: border-box;
+        margin-left: 5px;
+        outline: none;
+        border: 1px solid #999;
+        &.is-invalid {
+          border: 1px solid red;
         }
+      }
+
+      img {
+        vertical-align: sub;
+      }
+
+      .error-msg {
+        position: absolute;
+        top: 100%;
+        left: 495px;
+        color: red;
+      }
+    }
+
+    .controls {
+      text-align: center;
+      position: relative;
+
+      input {
+        vertical-align: middle;
+      }
+
+      .error-msg {
+        position: absolute;
+        top: 100%;
+        left: 495px;
+        color: red;
+      }
+    }
+
+    .btn {
+      text-align: center;
+      line-height: 36px;
+      margin: 17px 0 0 55px;
+
+      button {
+        outline: none;
+        width: 270px;
+        height: 36px;
+        background: #e1251b;
+        color: #fff !important;
+        display: inline-block;
+        font-size: 16px;
       }
     }
   }
+
+  .copyright {
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 24px;
+
+    ul {
+      li {
+        display: inline-block;
+        border-right: 1px solid #e4e4e4;
+        padding: 0 20px;
+        margin: 15px 0;
+      }
+    }
+  }
+}
 </style>
